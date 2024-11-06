@@ -12,7 +12,7 @@ title                    : "Jiale Chen / Ph.D"
 title_separator          : "-"
 name                     : "Jiale Chen"
 description              : "Bioinformatian"
-url                      : https://jlchen5.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+url                      : "https://jlchen5.github.io"
 baseurl                  : "/blog" # the subpath of your site, e.g. "/blog"
 repository               : "jlchen5/jlchen5.github.io"
 
