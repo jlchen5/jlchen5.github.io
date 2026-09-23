@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jiale Chen</title>
+<meta name="description" content="Jiale Chen — bioinformatics. Tools and pipelines for sequencing data: coverage statistics, single-cell analysis, and command-line utilities.">
+<meta property="og:title" content="Jiale Chen">
+<meta property="og:description" content="Bioinformatics. Tools and pipelines for sequencing data.">
+<meta property="og:type" content="profile">
+<meta property="og:url" content="https://jlchen5.github.io">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EEF1F2;
+  --card:#FFFFFF;
+  --ink:#14191C;
+  --muted:#59656C;
+  --line:#D2D9DC;
+  --deep:#1D4E5F;
+  --sans:"Instrument Sans","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#11161A;
+    --card:#161C21;
+    --ink:#E4EAEE;
+    --muted:#93A2AA;
+    --line:#283238;
+    --deep:#7FC0D2;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#11161A;
+  --card:#161C21;
+  --ink:#E4EAEE;
+  --muted:#93A2AA;
+  --line:#283238;
+  --deep:#7FC0D2;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--serif);
+  font-size:1.0625rem;
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:74ch;margin:0 auto;padding:clamp(2.5rem,7vw,5.5rem) clamp(1.25rem,5vw,2rem) 4rem}
+a{color:var(--deep);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--deep) 32%,transparent)}
+a:hover{border-bottom-color:var(--deep)}
+a:focus-visible{outline:2px solid var(--deep);outline-offset:3px;border-radius:2px}
+
+/* ---- hero ---- */
+h1{
+  font-family:var(--sans);
+  font-weight:600;
+  font-size:clamp(2.6rem,9vw,4.25rem);
+  line-height:.98;
+  letter-spacing:-.035em;
+  margin:0;
+}
+.lead{
+  margin:1.1rem 0 0;
+  max-width:52ch;
+  font-size:clamp(1.0625rem,2.4vw,1.1875rem);
+  color:var(--ink);
+}
+.jump{
+  font-family:var(--sans);
+  font-size:.9375rem;
+  margin:1.5rem 0 0;
+  display:flex;
+  flex-wrap:wrap;
+  gap:0 1.5rem;
+  color:var(--muted);
+}
+
+/* ---- coverage track ---- */
+.track{margin:clamp(2.75rem,8vw,4rem) 0 0}
+.track svg{display:block;width:100%;height:auto}
+.track rect{fill:var(--deep)}
+.track .base{stroke:var(--line);stroke-width:1}
+.reveal{animation:sweep 1400ms cubic-bezier(.22,.61,.36,1) both}
+@keyframes sweep{from{width:0}to{width:960px}}
+.track figcaption{
+  font-family:var(--sans);
+  font-size:.8125rem;
+  color:var(--muted);
+  margin-top:.7rem;
+  max-width:46ch;
+}
+@media (prefers-reduced-motion: reduce){
+  .reveal{animation:none;width:960px}
+}
+
+/* ---- sections ---- */
+section{margin-top:clamp(3rem,8vw,4.5rem)}
+h2{
+  font-family:var(--sans);
+  font-weight:600;
+  font-size:1.0625rem;
+  letter-spacing:-.01em;
+  margin:0 0 1.25rem;
+  padding-bottom:.55rem;
+  border-bottom:1px solid var(--line);
+}
+p{margin:0 0 1.1rem;max-width:66ch}
+p:last-child{margin-bottom:0}
+
+/* ---- repo list ---- */
+.repos{list-style:none;margin:0;padding:0}
+.repos li{padding:1.15rem 0;border-bottom:1px solid var(--line)}
+.repos li:first-child{padding-top:0}
+.repos li:last-child{border-bottom:0;padding-bottom:0}
+.repo-name{
+  font-family:var(--mono);
+  font-size:.9375rem;
+  font-weight:500;
+  letter-spacing:-.02em;
+  word-break:break-word;
+}
+.repos p{
+  margin:.35rem 0 0;
+  font-size:1rem;
+  color:var(--muted);
+  max-width:60ch;
+}
+.repos .extra{
+  font-family:var(--sans);
+  font-size:.875rem;
+  margin-top:.4rem;
+}
+
+/* ---- contact ---- */
+.contact{
+  list-style:none;margin:0;padding:0;
+  font-family:var(--sans);font-size:1rem;
+}
+.contact li{display:flex;gap:1rem;padding:.55rem 0}
+.contact span{color:var(--muted);flex:0 0 7.5rem;font-size:.9375rem}
+.contact a{word-break:break-word}
+
+footer{
+  margin-top:clamp(3rem,8vw,4.5rem);
+  padding-top:1.25rem;
+  border-top:1px solid var(--line);
+  font-family:var(--sans);
+  font-size:.8125rem;
+  color:var(--muted);
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <header>
+    <h1>Jiale&nbsp;Chen</h1>
+    <p class="lead">I work on sequencing data — coverage statistics, single-cell pipelines, and the small command-line tools that sit between them.</p>
+    <!-- 想加一行单位/职位，就把下面这行注释打开并改掉：
+    <p class="lead" style="color:var(--muted)">Bioinformatics at Your Institution.</p>
+    -->
+    <p class="jump">
+      <a href="#work">What I work on</a>
+      <a href="#code">Code</a>
+      <a href="#contact">Contact</a>
+    </p>
+  </header>
+
+  <figure class="track">
+    <svg viewBox="0 0 960 146" role="img" aria-label="Illustration of a sequencing read-depth track across a region, with peaks over exons and near-zero coverage between them.">
+      <defs><clipPath id="sweep"><rect class="reveal" x="0" y="0" width="960" height="146"/></clipPath></defs>
+      <g clip-path="url(#sweep)">
+      <g transform="translate(0,132) scale(1,-1)">
+      <rect x="0" y="0.00" width="4.90" height="9.37" rx="0.6"/>
+      <rect x="6.00" y="0.00" width="4.90" height="8.98" rx="0.6"/>
+      <rect x="12.00" y="0.00" width="4.90" height="7.66" rx="0.6"/>
+      <rect x="18.00" y="0.00" width="4.90" height="7.79" rx="0.6"/>
+      <rect x="24.00" y="0.00" width="4.90" height="8.45" rx="0.6"/>
+      <rect x="30.00" y="0.00" width="4.90" height="6.996" rx="0.6"/>
+      <rect x="36.00" y="0.00" width="4.90" height="7.39" rx="0.6"/>
+      <rect x="42.00" y="0.00" width="4.90" height="23.50" rx="0.6"/>
+      <rect x="48.00" y="0.00" width="4.90" height="51.48" rx="0.6"/>
+      <rect x="54.00" y="0.00" width="4.90" height="41.32" rx="0.6"/>
+      <rect x="60.00" y="0.00" width="4.90" height="51.61" rx="0.6"/>
+      <rect x="66.00" y="0.00" width="4.90" height="40.52" rx="0.6"/>
+      <rect x="72.00" y="0.00" width="4.90" height="50.03" rx="0.6"/>
+      <rect x="78.00" y="0.00" width="4.90" height="46.20" rx="0.6"/>
+      <rect x="84.00" y="0.00" width="4.90" height="48.05" rx="0.6"/>
+      <rect x="90.00" y="0.00" width="4.90" height="44.09" rx="0.6"/>
+      <rect x="96.00" y="0.00" width="4.90" height="43.82" rx="0.6"/>
+      <rect x="102.00" y="0.00" width="4.90" height="49.37" rx="0.6"/>
+      <rect x="108.00" y="0.00" width="4.90" height="50.56" rx="0.6"/>
+      <rect x="114.00" y="0.00" width="4.90" height="48.05" rx="0.6"/>
+      <rect x="120.00" y="0.00" width="4.90" height="25.87" rx="0.6"/>
+      <rect x="126.00" y="0.00" width="4.90" height="7.66" rx="0.6"/>
+      <rect x="132.00" y="0.00" width="4.90" height="6.60" rx="0.6"/>
+      <rect x="138.00" y="0.00" width="4.90" height="6.60" rx="0.6"/>
+      <rect x="144.00" y="0.00" width="4.90" height="8.98" rx="0.6"/>
+      <rect x="150.00" y="0.00" width="4.90" height="8.18" rx="0.6"/>
+      <rect x="156.00" y="0.00" width="4.90" height="9.24" rx="0.6"/>
+      <rect x="162.00" y="0.00" width="4.90" height="9.24" rx="0.6"/>
+      <rect x="168.00" y="0.00" width="4.90" height="74.32" rx="0.6"/>
+      <rect x="174.00" y="0.00" width="4.90" height="116.69" rx="0.6"/>
+      <rect x="180.00" y="0.00" width="4.90" height="116.56" rx="0.6"/>
+      <rect x="186.00" y="0.00" width="4.90" height="130.15" rx="0.6"/>
+      <rect x="192.00" y="0.00" width="4.90" height="130.94" rx="0.6"/>
+      <rect x="198.00" y="0.00" width="4.90" height="106.13" rx="0.6"/>
+      <rect x="204.00" y="0.00" width="4.90" height="130.42" rx="0.6"/>
+      <rect x="210.00" y="0.00" width="4.90" height="114.97" rx="0.6"/>
+      <rect x="216.00" y="0.00" width="4.90" height="115.24" rx="0.6"/>
+      <rect x="222.00" y="0.00" width="4.90" height="131.21" rx="0.6"/>
+      <rect x="228.00" y="0.00" width="4.90" height="110.48" rx="0.6"/>
+      <rect x="234.00" y="0.00" width="4.90" height="130.68" rx="0.6"/>
+      <rect x="240.00" y="0.00" width="4.90" height="111.41" rx="0.6"/>
+      <rect x="246.00" y="0.00" width="4.90" height="110.22" rx="0.6"/>
+      <rect x="252.00" y="0.00" width="4.90" height="101.38" rx="0.6"/>
+      <rect x="258.00" y="0.00" width="4.90" height="103.22" rx="0.6"/>
+      <rect x="264.00" y="0.00" width="4.90" height="92.40" rx="0.6"/>
+      <rect x="270.00" y="0.00" width="4.90" height="62.57" rx="0.6"/>
+      <rect x="276.00" y="0.00" width="4.90" height="31.68" rx="0.6"/>
+      <rect x="282.00" y="0.00" width="4.90" height="9.24" rx="0.6"/>
+      <rect x="288.00" y="0.00" width="4.90" height="7.79" rx="0.6"/>
+      <rect x="294.00" y="0.00" width="4.90" height="8.45" rx="0.6"/>
+      <rect x="300.00" y="0.00" width="4.90" height="8.98" rx="0.6"/>
+      <rect x="306.00" y="0.00" width="4.90" height="8.32" rx="0.6"/>
+      <rect x="312.00" y="0.00" width="4.90" height="7.26" rx="0.6"/>
+      <rect x="318.00" y="0.00" width="4.90" height="49.90" rx="0.6"/>
+      <rect x="324.00" y="0.00" width="4.90" height="76.16" rx="0.6"/>
+      <rect x="330.00" y="0.00" width="4.90" height="64.81" rx="0.6"/>
+      <rect x="336.00" y="0.00" width="4.90" height="61.91" rx="0.6"/>
+      <rect x="342.00" y="0.00" width="4.90" height="55.57" rx="0.6"/>
+      <rect x="348.00" y="0.00" width="4.90" height="66.40" rx="0.6"/>
+      <rect x="354.00" y="0.00" width="4.90" height="76.43" rx="0.6"/>
+      <rect x="360.00" y="0.00" width="4.90" height="32.47" rx="0.6"/>
+      <rect x="366.00" y="0.00" width="4.90" height="7.52" rx="0.6"/>
+      <rect x="372.00" y="0.00" width="4.90" height="6.996" rx="0.6"/>
+      <rect x="378.00" y="0.00" width="4.90" height="8.18" rx="0.6"/>
+      <rect x="384.00" y="0.00" width="4.90" height="8.58" rx="0.6"/>
+      <rect x="390.00" y="0.00" width="4.90" height="8.05" rx="0.6"/>
+      <rect x="396.00" y="0.00" width="4.90" height="7.79" rx="0.6"/>
+      <rect x="402.00" y="0.00" width="4.90" height="6.996" rx="0.6"/>
+      <rect x="408.00" y="0.00" width="4.90" height="8.58" rx="0.6"/>
+      <rect x="414.00" y="0.00" width="4.90" height="8.98" rx="0.6"/>
+      <rect x="420.00" y="0.00" width="4.90" height="34.45" rx="0.6"/>
+      <rect x="426.00" y="0.00" width="4.90" height="67.85" rx="0.6"/>
+      <rect x="432.00" y="0.00" width="4.90" height="102.43" rx="0.6"/>
+      <rect x="438.00" y="0.00" width="4.90" height="132.00" rx="0.6"/>
+      <rect x="444.00" y="0.00" width="4.90" height="132.00" rx="0.6"/>
+      <rect x="450.00" y="0.00" width="4.90" height="120.78" rx="0.6"/>
+      <rect x="456.00" y="0.00" width="4.90" height="132.00" rx="0.6"/>
+      <rect x="462.00" y="0.00" width="4.90" height="112.99" rx="0.6"/>
+      <rect x="468.00" y="0.00" width="4.90" height="132.00" rx="0.6"/>
+      <rect x="474.00" y="0.00" width="4.90" height="132.00" rx="0.6"/>
+      <rect x="480.00" y="0.00" width="4.90" height="121.57" rx="0.6"/>
+      <rect x="486.00" y="0.00" width="4.90" height="109.16" rx="0.6"/>
+      <rect x="492.00" y="0.00" width="4.90" height="121.04" rx="0.6"/>
+      <rect x="498.00" y="0.00" width="4.90" height="132.00" rx="0.6"/>
+      <rect x="504.00" y="0.00" width="4.90" height="116.82" rx="0.6"/>
+      <rect x="510.00" y="0.00" width="4.90" height="132.00" rx="0.6"/>
+      <rect x="516.00" y="0.00" width="4.90" height="121.31" rx="0.6"/>
+      <rect x="522.00" y="0.00" width="4.90" height="117.22" rx="0.6"/>
+      <rect x="528.00" y="0.00" width="4.90" height="112.46" rx="0.6"/>
+      <rect x="534.00" y="0.00" width="4.90" height="130.68" rx="0.6"/>
+      <rect x="540.00" y="0.00" width="4.90" height="132.00" rx="0.6"/>
+      <rect x="546.00" y="0.00" width="4.90" height="132.00" rx="0.6"/>
+      <rect x="552.00" y="0.00" width="4.90" height="132.00" rx="0.6"/>
+      <rect x="558.00" y="0.00" width="4.90" height="104.41" rx="0.6"/>
+      <rect x="564.00" y="0.00" width="4.90" height="76.30" rx="0.6"/>
+      <rect x="570.00" y="0.00" width="4.90" height="38.02" rx="0.6"/>
+      <rect x="576.00" y="0.00" width="4.90" height="7.92" rx="0.6"/>
+      <rect x="582.00" y="0.00" width="4.90" height="8.45" rx="0.6"/>
+      <rect x="588.00" y="0.00" width="4.90" height="6.86" rx="0.6"/>
+      <rect x="594.00" y="0.00" width="4.90" height="8.58" rx="0.6"/>
+      <rect x="600.00" y="0.00" width="4.90" height="6.996" rx="0.6"/>
+      <rect x="606.00" y="0.00" width="4.90" height="7.26" rx="0.6"/>
+      <rect x="612.00" y="0.00" width="4.90" height="20.72" rx="0.6"/>
+      <rect x="618.00" y="0.00" width="4.90" height="57.29" rx="0.6"/>
+      <rect x="624.00" y="0.00" width="4.90" height="62.96" rx="0.6"/>
+      <rect x="630.00" y="0.00" width="4.90" height="62.83" rx="0.6"/>
+      <rect x="636.00" y="0.00" width="4.90" height="61.25" rx="0.6"/>
+      <rect x="642.00" y="0.00" width="4.90" height="57.95" rx="0.6"/>
+      <rect x="648.00" y="0.00" width="4.90" height="64.02" rx="0.6"/>
+      <rect x="654.00" y="0.00" width="4.90" height="52.40" rx="0.6"/>
+      <rect x="660.00" y="0.00" width="4.90" height="59.80" rx="0.6"/>
+      <rect x="666.00" y="0.00" width="4.90" height="27.06" rx="0.6"/>
+      <rect x="672.00" y="0.00" width="4.90" height="8.98" rx="0.6"/>
+      <rect x="678.00" y="0.00" width="4.90" height="8.98" rx="0.6"/>
+      <rect x="684.00" y="0.00" width="4.90" height="8.84" rx="0.6"/>
+      <rect x="690.00" y="0.00" width="4.90" height="8.84" rx="0.6"/>
+      <rect x="696.00" y="0.00" width="4.90" height="8.45" rx="0.6"/>
+      <rect x="702.00" y="0.00" width="4.90" height="8.58" rx="0.6"/>
+      <rect x="708.00" y="0.00" width="4.90" height="27.72" rx="0.6"/>
+      <rect x="714.00" y="0.00" width="4.90" height="69.83" rx="0.6"/>
+      <rect x="720.00" y="0.00" width="4.90" height="101.64" rx="0.6"/>
+      <rect x="726.00" y="0.00" width="4.90" height="109.69" rx="0.6"/>
+      <rect x="732.00" y="0.00" width="4.90" height="81.58" rx="0.6"/>
+      <rect x="738.00" y="0.00" width="4.90" height="90.55" rx="0.6"/>
+      <rect x="744.00" y="0.00" width="4.90" height="103.62" rx="0.6"/>
+      <rect x="750.00" y="0.00" width="4.90" height="105.20" rx="0.6"/>
+      <rect x="756.00" y="0.00" width="4.90" height="85.93" rx="0.6"/>
+      <rect x="762.00" y="0.00" width="4.90" height="96.36" rx="0.6"/>
+      <rect x="768.00" y="0.00" width="4.90" height="99.92" rx="0.6"/>
+      <rect x="774.00" y="0.00" width="4.90" height="100.85" rx="0.6"/>
+      <rect x="780.00" y="0.00" width="4.90" height="96.62" rx="0.6"/>
+      <rect x="786.00" y="0.00" width="4.90" height="109.30" rx="0.6"/>
+      <rect x="792.00" y="0.00" width="4.90" height="101.38" rx="0.6"/>
+      <rect x="798.00" y="0.00" width="4.90" height="105.20" rx="0.6"/>
+      <rect x="804.00" y="0.00" width="4.90" height="102.96" rx="0.6"/>
+      <rect x="810.00" y="0.00" width="4.90" height="93.98" rx="0.6"/>
+      <rect x="816.00" y="0.00" width="4.90" height="106.39" rx="0.6"/>
+      <rect x="822.00" y="0.00" width="4.90" height="109.82" rx="0.6"/>
+      <rect x="828.00" y="0.00" width="4.90" height="65.60" rx="0.6"/>
+      <rect x="834.00" y="0.00" width="4.90" height="51.74" rx="0.6"/>
+      <rect x="840.00" y="0.00" width="4.90" height="9.11" rx="0.6"/>
+      <rect x="846.00" y="0.00" width="4.90" height="8.71" rx="0.6"/>
+      <rect x="852.00" y="0.00" width="4.90" height="8.18" rx="0.6"/>
+      <rect x="858.00" y="0.00" width="4.90" height="6.86" rx="0.6"/>
+      <rect x="864.00" y="0.00" width="4.90" height="8.32" rx="0.6"/>
+      <rect x="870.00" y="0.00" width="4.90" height="7.39" rx="0.6"/>
+      <rect x="876.00" y="0.00" width="4.90" height="7.92" rx="0.6"/>
+      <rect x="882.00" y="0.00" width="4.90" height="22.44" rx="0.6"/>
+      <rect x="888.00" y="0.00" width="4.90" height="40.39" rx="0.6"/>
+      <rect x="894.00" y="0.00" width="4.90" height="40.39" rx="0.6"/>
+      <rect x="900.00" y="0.00" width="4.90" height="37.49" rx="0.6"/>
+      <rect x="906.00" y="0.00" width="4.90" height="38.15" rx="0.6"/>
+      <rect x="912.00" y="0.00" width="4.90" height="41.45" rx="0.6"/>
+      <rect x="918.00" y="0.00" width="4.90" height="39.07" rx="0.6"/>
+      <rect x="924.00" y="0.00" width="4.90" height="41.45" rx="0.6"/>
+      <rect x="930.00" y="0.00" width="4.90" height="39.996" rx="0.6"/>
+      <rect x="936.00" y="0.00" width="4.90" height="44.62" rx="0.6"/>
+      <rect x="942.00" y="0.00" width="4.90" height="22.04" rx="0.6"/>
+      <rect x="948.00" y="0.00" width="4.90" height="8.18" rx="0.6"/>
+      <rect x="954.00" y="0.00" width="4.90" height="7.92" rx="0.6"/>
+      </g>
+      </g>
+      <line class="base" x1="0" y1="140" x2="960" y2="140"/>
+    </svg>
+    <figcaption>Read depth across a region: coverage piles up over exons and drops to noise between them. Getting this number right is most of the job.</figcaption>
+  </figure>
+
+  <section id="work">
+    <h2>What I work on</h2>
+    <p>Most of what I build sits between raw sequencer output and something a biologist can act on. That means depth and coverage statistics you can defend, single-cell pipelines that produce the same answer twice, and file handling fast enough that nobody thinks about it.</p>
+    <p>I keep the tools small and public. If a step in an analysis took me a week to get right, the script for it should take someone else an afternoon.</p>
+    <!-- 这一段可以换成你自己的定位：现在在哪、在做什么方向、想找什么样的合作。 -->
+  </section>
+
+  <section id="code">
+    <h2>Code</h2>
+    <ul class="repos">
+      <li>
+        <a class="repo-name" href="https://github.com/jlchen5/scRNA-seq-analysis">scRNA-seq-analysis</a>
+        <p>A single-cell RNA-seq pipeline covering the problems you actually hit — QC thresholds, batch handling, annotation — rather than the happy path.</p>
+      </li>
+      <li>
+        <a class="repo-name" href="https://github.com/jlchen5/sequencing-read-depth-calculate">sequencing-read-depth-calculate</a>
+        <p>Calculates sequencing read depth from NGS data, so coverage claims in a methods section have something behind them.</p>
+      </li>
+      <li>
+        <a class="repo-name" href="https://github.com/jlchen5/fmd5sum">fmd5sum</a>
+        <p>A faster md5sum for the multi-terabyte transfers that genomics runs on.</p>
+        <p class="extra"><a href="https://pypi.org/project/fmd5sum/">Install from PyPI</a></p>
+      </li>
+      <li>
+        <a class="repo-name" href="https://github.com/jlchen5/Deep-Learning-in-Genomics">Deep-Learning-in-Genomics</a>
+        <p>Notes and experiments on applying deep learning to genomics problems.</p>
+      </li>
+      <li>
+        <a class="repo-name" href="https://github.com/jlchen5/CELR-D-22-00015">CELR-D-22-00015</a>
+        <p>Analysis code for Li et al., <em>Cell Regeneration</em>, 2022.</p>
+      </li>
+      <li>
+        <a class="repo-name" href="https://github.com/jlchen5/DeepSeek-handbook">DeepSeek-handbook</a>
+        <p>DeepSeek 使用手册 — a practical Chinese-language guide to working with the models.</p>
+      </li>
+    </ul>
+    <p style="margin-top:1.5rem;font-family:var(--sans);font-size:.9375rem">
+      <a href="https://github.com/jlchen5?tab=repositories">All repositories on GitHub</a>
+    </p>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <ul class="contact">
+      <li><span>Email</span><a href="mailto:xomics1@gmail.com">xomics1@gmail.com</a></li>
+      <li><span>GitHub</span><a href="https://github.com/jlchen5">github.com/jlchen5</a></li>
+      <li><span>Scholar</span><a href="https://scholar.google.com/citations?user=PS_CX0AAAAAJ">Google Scholar</a></li>
+      <li><span>Organisation</span><a href="https://github.com/X-Omics1">X-Omics1</a></li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>Last updated September 2026. Source on <a href="https://github.com/jlchen5/jlchen5.github.io">GitHub</a>.</p>
+  </footer>
+
+</main>
+</body>
+</html>
